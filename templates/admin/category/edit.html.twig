@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Catégories{% endblock %}
+
+{% block body %}
+    
+    <h1 class="text-center mt-3 mb-3">Édition catégories</h1>
+    
+    {# ouvre la balise form #}
+    {{ form_start(form) }}
+    
+    {{ form_row(form.name) }}
+    
+    {# bloc de formulaire du champ name #}
+    <div class="text-right">
+        <button type="submit" class="btn btn-info">
+            Enregistrer
+        </button>
+        <a href="{{ path('app_admin_category_index') }}" class="btn btn-outline-secondary">
+            Retour
+        </a>
+    </div>
+    
+    {# ferme la balise form #}
+    {{ form_end(form) }}
+
+{% endblock %}

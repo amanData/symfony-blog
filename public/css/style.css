@@ -1,0 +1,50 @@
+body {
+    background: #efefef;
+}
+nav.navbar {
+    background: var(--purple);
+}
+nav.navbar-admin {
+    background: var(--cyan);
+}
+p {
+    margin: 0;
+}
+table {
+    margin: auto;
+}
+table,
+td, th {
+    border-collapse: collapse;
+    text-align: center;
+    padding: 0.5em;
+}
+td {
+    padding: 0.2em 0.7em;
+}
+input {
+    padding: 7px;
+    line-height: 1.2;
+    font-size: 90%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+    width: 400px;
+}
+button-gris {
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background-color:#ededed;
+    border-radius:6px;
+    border:1px solid #dcdcdc;
+    display:inline-block;
+    cursor:pointer;
+    color:#777777;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #ffffff;
+}
+button-gris:hover {
+    background-color:#dfdfdf;
+}
