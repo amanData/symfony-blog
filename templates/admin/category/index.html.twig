@@ -18,6 +18,7 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Nom</th>
+                <th scope="col" style="width: 250px"></th>
             </tr>
         </thead>
         
@@ -26,6 +27,14 @@
                 <tr>
                     <td>{{ categorie.id }}</td>
                     <td>{{ categorie.name }}</td>
+                    <td class="text-right">
+                        <a href="{{ path('app_admin_category_edit', {'id': categorie.id}) }}" class="btn btn-info">
+                            Modifier
+                        </a>
+                        <a href="{{ path('app_admin_category_delete', {'id': categorie.id}) }}" class="btn btn-outline-danger ml-1">
+                            Supprimer
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
