@@ -13,6 +13,8 @@
 
 <body>
 
+    {# s'il y a un utilisateur connecté et qu'il a le ROLE_ADMIN #}
+    {% if is_granted('ROLE_ADMIN') %}
     <nav class ="navbar navbar-expand-md navbar-dark navbar-admin">
         <div class="container navbar-nav">
             <a href="" class="navbar-brand">
@@ -25,10 +27,16 @@
                             Gestion catégories
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_admin_article_index') }}" class="nav-link">
+                            Gestion articles
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
+    {% endif %}
     
     <nav class ="navbar navbar-expand-md navbar-dark">
         <div class="container navbar-nav">
@@ -37,11 +45,30 @@
             </a>
             {{ render(controller('App\\Controller\\CategoryController::menu')) }}
             <ul class="navbar-nav">
+                {# app.user = l'utilisateur connecté #}
+                {% if app.user is null %}
                 <li class="nav-item">
                     <a href="{{ path('app_security_register') }}" class="nav-link">
                         Inscription
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_security_login') }}" class="nav-link">
+                        Connexion
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link">
+                        {{ app.user }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_security_logout') }}" class="nav-link">
+                        Déconnexion
+                    </a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </nav>

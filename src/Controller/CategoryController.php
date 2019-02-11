@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,9 +19,14 @@ class CategoryController extends AbstractController
      */
     public function index(Category $category)
     {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository(Article::class);
+        $articles = $repository->findBy(['category' => $category], ['publicationDate' => 'DESC']);
+        
         return $this->render('category/index.html.twig',
             [
-                'category' => $category
+                'category' => $category,
+                'articles' => $articles
             ]
         );
     }

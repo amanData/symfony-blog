@@ -6,5 +6,15 @@
     
     <h1 class="text-center mb-3 mt-3">Inscription</h1>
     
-    {{ form_rest(form) }}
+    {{ form_start(form) }}
+    {{ form_row(form.lastname) }}
+    {{ form_row(form.firstname) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.plainPassword) }}
+    <div class="text-right">
+        <button type="submit" class="btn btn-info">
+            Enregistrer
+        </button>
+    </div>
+    {{ form_end(form) }}
 {% endblock %}
