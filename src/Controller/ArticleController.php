@@ -76,7 +76,14 @@ class ArticleController extends AbstractController
                 
                 // message de confirmation
                 $this->addFlash('success', 'Votre commentaire est enregistré');
-                return $this->redirect($request->getUri());
+                // redirection vers la page sur laquelle on est
+                // pour ne pas être en POST
+                return $this->redirectToRoute(
+                    $request->get('_route'), // route de la page courante
+                    [
+                        'id' => $article->getId()
+                    ]
+                );
             } else {
                 // message d'erreur
                 $this->addFlash('error', 'Le formulaire contient des erreurs');

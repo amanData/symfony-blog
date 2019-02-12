@@ -48,19 +48,19 @@
     
     <h4>{{ article.comments|length }} commentaire(s)</h4>
     <ul class="list-group">
-    {% for comment in article.comments %}
-        {% if comment.user is null %}
-            {% set auteur = 'Anonyme' %}
+        {% for comment in article.comments %}
+            {% if comment.user is null %}
+                {% set auteur = 'Anonyme' %}
+            {% else %}
+                {% set auteur = comment.user %}
+            {% endif %}
+            <li class="list-group-item">
+                <p><em>Par {{ auteur }}, le {{ comment.publicationDate|date('d/m/Y à H:i') }}</em></p>
+                <p>{{ comment.content|nl2br }}</p>
+            </li>
         {% else %}
-            {% set auteur = comment.user %}
-        {% endif %}
-        <li class="list-group-item">
-            <p><em>Par {{ auteur }}, le {{ comment.publicationDate|date('d/m/Y à H:i') }}</em></p>
-            <p>{{ comment.content|nl2br }}</p>
-        </li>
-    {% else %}
-        <li class="list-group-item m-3">Il n'y a aucun commentaire pour le moment.</li>
-    {% endfor %}
+            <li class="list-group-item m-3">Il n'y a aucun commentaire pour le moment.</li>
+        {% endfor %}
     </ul>
     
     <div class="mb-3"></div>
