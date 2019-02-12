@@ -46,9 +46,9 @@
     
     <div class="mb-3"></div>
     
-    <h4>{{ comments|length }} commentaire(s)</h4>
+    <h4>{{ article.comments|length }} commentaire(s)</h4>
     <ul class="list-group">
-    {% for comment in comments %}
+    {% for comment in article.comments %}
         {% if comment.user is null %}
             {% set auteur = 'Anonyme' %}
         {% else %}

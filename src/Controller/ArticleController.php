@@ -41,7 +41,7 @@ class ArticleController extends AbstractController
          *      + contenu du message
          */
         
-        $em = $this->getDoctrine()->getManager();
+        /*$em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository(Comment::class);
         $comments = $repository->findBy(
             [
@@ -50,7 +50,7 @@ class ArticleController extends AbstractController
             [
                 'publicationDate' => 'DESC'
             ]
-        );
+        );*/
     
         $comment = new Comment();
         $comment->setPublicationDate(new \DateTime());
@@ -75,7 +75,7 @@ class ArticleController extends AbstractController
                 $em->flush();
                 
                 // message de confirmation
-                $this->addFlash('success', 'Le commentaire est enregistré');
+                $this->addFlash('success', 'Votre commentaire est enregistré');
                 return $this->redirect($request->getUri());
             } else {
                 // message d'erreur
@@ -87,7 +87,7 @@ class ArticleController extends AbstractController
             'article/index.html.twig',
             [
                 'article' => $article,
-                'comments' => $comments,
+//                'comments' => $comments,
                 'form' => $form->createView()
             ]
         );
