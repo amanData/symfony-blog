@@ -41,8 +41,8 @@ class ArticleController extends AbstractController
          *      + contenu du message
          */
         
-        /*$em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository(Comment::class);
+        $em = $this->getDoctrine()->getManager();
+        /*$repository = $em->getRepository(Comment::class);
         $comments = $repository->findBy(
             [
                 'article' => $article
