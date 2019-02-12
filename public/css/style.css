@@ -1,6 +1,9 @@
 body {
     background: #efefef;
 }
+h2 {
+    border-bottom:2px solid var(--purple);
+}
 nav.navbar {
     background: var(--purple);
 }

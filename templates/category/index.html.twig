@@ -6,24 +6,27 @@
 
     <h1 class="text-center mb-3 mt-3">{{ category }}</h1>
     
+    <h2 class="mb-3">Derniers articles</h2>
+    
     <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Titre</th>
-                <th scope="col">Date de publication</th>
-                <th scope="col">Auteur</th>
-            </tr>
+        <thead>
+        <tr>
+            <th scope="col">Titre</th>
+            <th scope="col">Date de publication</th>
+            <th scope="col">Auteur</th>
+        </tr>
         </thead>
-        
         <tbody>
         {% for article in articles %}
-            <tr>
-                <td>{{ article.id }}</td>
-                <td>{{ article.title }}</td>
-                <td>{{ article.publicationDate|date('d/m/Y H:i') }}</td>
-                <td>{{ article.author }}</td>
-            </tr>
+            
+                <tr>
+                    <td>
+                        <a href="{{ path('app_article_index', {'id': article.id}) }}">{{ article.title }}</a>
+                    </td>
+                    <td>{{ article.publicationDate|date('d/m/Y H:i') }}</td>
+                    <td>{{ article.author }}</td>
+                </tr>
+            
         {% else %}
             <tr>
                 <td colspan="6" class="text-center">

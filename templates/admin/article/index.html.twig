@@ -21,6 +21,7 @@
             <th scope="col">Date de publication</th>
             <th scope="col">Catégorie</th>
             <th scope="col">Auteur</th>
+            <th scope="col">Illustration</th>
             <th width="250px"></th>
         </tr>
         </thead>
@@ -33,6 +34,13 @@
                     <td>{{ article.publicationDate|date('d/m/Y H:i') }}</td>
                     <td>{{ article.category }}</td>
                     <td>{{ article.author }}</td>
+                    <td>
+                        {% if article.image is not null %}
+                        <img src="{{ asset('images/' ~ article.image) }}" alt="" class="rounded" height="50px">
+                        {% else %}
+                            Aucune illustration
+                        {% endif %}
+                    </td>
                     <td class="text-right" width="250px">
                         <a href="{{ path('app_admin_article_edit', {'id': article.id}) }}" class="btn btn-info">
                             Modifier

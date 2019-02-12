@@ -21,7 +21,16 @@ class CategoryController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository(Article::class);
-        $articles = $repository->findBy(['category' => $category], ['publicationDate' => 'DESC']);
+        // les 5 derniers articles de la catégorie
+        $articles = $repository->findBy(
+            [
+                'category' => $category
+            ],
+            [
+                'publicationDate' => 'DESC'
+            ],
+            5
+        );
         
         return $this->render('category/index.html.twig',
             [

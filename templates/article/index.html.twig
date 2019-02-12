@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Article{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mb-5 mt-3">{{ article.title }}</h1>
+    
+    <p>
+        Par : {{ article.author }},
+        <em>{{ article.publicationDate|date('d/m/y H:i') }}</em><br>
+        Dans : <strong>{{ article.category }}</strong>
+    </p>
+    
+    {% if article.image is not null %}
+        <div class="text-center mb-3 mt-3">
+            <img src="{{ asset('images/' ~ article.image) }}" alt="" class="rounded" width="50%">
+        </div>
+    {% endif %}
+    
+    <p>{{ article.content|nl2br }}</p>
+    
+    
+    <h2 class="mb-3 mt-3">Commentaires</h2>
+    
+    {{ form_start(form) }}
+        
+        {{ form_row(form.content) }}
+    
+        {% if app.user is not null %}
+            <div class="text-right">
+                <button type="submit" class="btn btn-info m-2">
+                    Publier
+                </button>
+            </div>
+        {% else %}
+            <div class="text-right">
+                <button type="submit" class="btn btn-outline-secondary">
+                    Publier anonymement
+                </button>
+                <a href="{{ path('app_security_login') }}" class="btn btn-info">
+                    Connectez-vous
+                </a>
+            </div>
+        {% endif %}
+    {{ form_end(form) }}
+    
+    <div class="mb-3"></div>
+    
+    <h4>{{ comments|length }} commentaire(s)</h4>
+    <ul class="list-group">
+    {% for comment in comments %}
+        {% if comment.user is null %}
+            {% set auteur = 'Anonyme' %}
+        {% else %}
+            {% set auteur = comment.user %}
+        {% endif %}
+        <li class="list-group-item">
+            <p><em>Par {{ auteur }}, le {{ comment.publicationDate|date('d/m/Y à H:i') }}</em></p>
+            <p>{{ comment.content|nl2br }}</p>
+        </li>
+    {% else %}
+        <li class="list-group-item m-3">Il n'y a aucun commentaire pour le moment.</li>
+    {% endfor %}
+    </ul>
+    
+    <div class="mb-3"></div>
+
+{% endblock %}

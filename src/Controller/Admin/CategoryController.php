@@ -98,10 +98,17 @@
         {
             $em = $this->getDoctrine()->getManager();
             
-            $em->remove($category);
-            $em->flush();
-            
-            $this->addFlash('success', 'La catégorie est supprimée');
+            if (!$category->getArticles()->isEmpty()) {
+                $this->addFlash(
+                    'error',
+                    'La catégorie n\'est pas vide, elle ne peut pas être supprimée'
+                );
+            } else {
+                $em->remove($category);
+                $em->flush();
+    
+                $this->addFlash('success', 'La catégorie est supprimée');
+            }
             
             return $this->redirectToRoute('app_admin_category_index');
         }

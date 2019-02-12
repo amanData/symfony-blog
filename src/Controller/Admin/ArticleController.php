@@ -7,6 +7,8 @@
     use App\Entity\Article;
     use App\Form\ArticleType;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+    use Symfony\Component\HttpFoundation\File\File;
+    use Symfony\Component\HttpFoundation\File\UploadedFile;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
     use Symfony\Component\Routing\Annotation\Route;
@@ -60,22 +62,35 @@
         public function edit(Request $request, $id)
         {
             $em = $this->getDoctrine()->getManager();
+            $originalImage = null;
     
             if (is_null($id)) { // création
                 $article = new Article();
                 // set auteur et date de publication
-                $article->setAuthor($this->getUser());
+                $article->setAuthor($this->getUser()); // existe car configuré dans security.yaml
+                // on peut aussi set la date dans le constructeur de la classe Article
                 $article->setPublicationDate(new \DateTime('now'));
             } else { // modification
                 $article = $em->find(Article::class, $id);
-        
+    
                 // 404 si l'id reçu dans l'url n'est pas en bdd
                 if (is_null($article)) {
                     throw new NotFoundHttpException();
                 }
+                
+                // si l'article contient déjà une image
+                if (!is_null($article->getImage())){
+                    // nom du fichier venant de la bdd
+                    $originalImage = $article->getImage();
+                    
+                    // on sette l'image avec un objet File
+                    // pour le traitement par le formulaire
+                    $article->setImage(
+                        new File($this->getParameter('upload_dir') . $originalImage)
+                    );
+                }
             }
-    
-    
+            
             // création du formulaire relié à l'article
             $form = $this->createForm(ArticleType::class, $article);
             
@@ -90,7 +105,39 @@
                 // si les validations (des annotations dans l'entity Category)
                 // sont passées
                 if ($form->isValid()) {
+                    /** @var UploadedFile $image */
+                    $image = $article->getImage();
                     
+                    // s'il y a eu une image uploadée
+                    if (!is_null($image)) {
+                        // nom que l'on donne à l'image
+                        // guessExtension() car getExtension() donne des fichiers tmp
+                        // car les fichiers uploadés transitent par un répertoire temporaire
+                        $filename = uniqid() . '.' . $image->guessExtension();
+                        
+                        // équivalent de move_uploaded_file()
+                        $image->move(
+                            // répertoire de destination
+                            // cf le paramètre upload_dir dans config/services.yaml
+                            $this->getParameter('upload_dir'),
+                            // nom du fichier
+                            $filename
+                        );
+                        
+                        // en modification, on supprime l'ancienne image
+                        // s'il y en a une
+                        if (!is_null($originalImage)) {
+                            unlink($this->getParameter('upload_dir') . $originalImage);
+                        }
+                        
+                        // on sette l'attribut image de l'article avec avec le
+                        // nom de l'image pour l'enregistrement en bdd
+                        $article->setImage($filename);
+                    } else {
+                        // sans upload, pour la modification, on sette
+                        // l'attribut image avec le nom de l'ancienne image
+                        $article->setImage($originalImage);
+                    }
                     
                     // enregistrement de la catégorie en bdd
                     $em->persist($article);
@@ -98,11 +145,15 @@
             
                     // message de confirmation
                     $this->addFlash('success', 'L\'article est enregistré');
+                    
                     // redirection vers la liste
                     return $this->redirectToRoute('app_admin_article_index');
+                    
                 } else {
+                    
                     // message d'erreur
                     $this->addFlash('error', 'Le formulaire contient des erreurs');
+                    
                 }
             }
     
@@ -110,7 +161,8 @@
                 'admin/article/edit.html.twig',
                 [
                     // passage du formulaire au template
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'original_image' => $originalImage
                 ]
             );
         }
